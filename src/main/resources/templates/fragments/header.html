@@ -1,0 +1,125 @@
+<div th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!--LOGO/TITLE-->
+        <a class="navbar-brand" th:href="@{/}">To Do</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div th:if="${user.id != 0}" class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/choosetreatment}">My To Do's<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/userprofile}">My Profile</a>
+                </li>
+            </ul>
+        </div>
+        <div th:if="${user.id == 0}">
+            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#loginmodal">Login</button>
+            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#signupmodal">Create Account</button>
+        </div>
+        <div th:unless="${user.id == 0}">
+            <form th:method="post" th:action="@{/logout}">
+                <button class="btn btn-dark" type="submit">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+    <div th:if="${user.id == 0}">
+        <div class="modal fade" id="signupmodal" role="dialog" aria-labelledby="signupmodal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="signupmodal-content">
+                    <div class="modal-body">
+                        <form th:method="post" th:action="@{/register}" th:object="${user}">
+
+                            <div class="input-div one">
+                                <div class="i">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <h5>Username</h5>
+                                    <input type="text" class="input" id="username" pattern="[A-Z/a-zæøåÆØÅ/s + A-Za-zæøåÆØÅ]+$"
+                                           oninvalid="setCustomValidity('Invalid.. Enter your username with only letters')"
+                                           oninput="setCustomValidity('')"
+                                           th:field="${user.username}" required>
+                                </div>
+                            </div>
+
+                            <div class="input-div two">
+                                <div class="i">
+                                    <i class="fas fa-at"></i>
+                                </div>
+                                <div>
+                                    <h5>E-Mail</h5>
+                                    <input class="input" type="email" id="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,4}$"
+                                           oninvalid="setCustomValidity('Invalid.. Enter a valid email')"
+                                           oninput="setCustomValidity('')"
+                                           th:field="${user.email}" required>
+                                </div>
+                            </div>
+
+                            <div class="input-div three">
+                                <div class="i">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div>
+                                    <h5>Password</h5>
+                                    <input type="password" class="input" id="password" th:field="${user.password}" required>
+                                </div>
+                            </div>
+
+                            <div class="input-div four">
+                                <div class="i">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <h5>Confirm password</h5>
+                                    <input type="password" class="input" id="confirmpassword" required>
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-dark" value="Create account">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${user.id == 0}">
+        <!--Modal Content-->
+        <div class="modal fade" id="loginmodal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="loginmodal-content">
+                    <div class="modal-body">
+                        <form th:method="post" th:action="@{/}" th:object="${loginToken}">
+                            <div class="input-div one">
+                                <div class="i">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <h5>E-Mail</h5>
+                                    <input type="text" class="input" name="email" th:field="${loginToken.email}"  required>
+                                </div>
+                            </div>
+                            <div class="input-div two">
+                                <div class="i">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div>
+                                    <h5>Password</h5>
+                                    <input type="password" class="input" name="password" th:field="${loginToken.password}" required>
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-dark" value="Login">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

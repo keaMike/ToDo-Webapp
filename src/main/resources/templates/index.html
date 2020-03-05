@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo</title>
+</head>
+<div th:include="fragments/header :: navbar"></div>
+<body>
+    <div class="container-fluid todolists">
+        <th:block th:if="${user.id != 0}" th:each="todolist : ${toDoLists}">
+            <div class="todolist">
+                <div>
+                    <!--SHOW TO DO LISTS-->
+                    <h3 class="todolist-header" th:text="${todolist.name}"></h3>
+                    <!--TOGGLE DROPDOWN-->
+                    <div class="dropdown">
+                        <button class="todolist-options" type="button" id="todolist"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-cog" title="List options" data-toggle="tooltip"></i>
+                        </button>
+
+                        <div class="dropdown-menu" aria-labelledby="todolist">
+                            <button class="dropdown-item" type="button" data-toggle="modal"
+                                    th:data-target="'#add' + ${#strings.replace(todolist.id,' ','')}">Add To Do</button>
+                            <button class="dropdown-item" type="button" data-toggle="modal"
+                                    th:data-target="'#deletelist' + ${#strings.replace(todolist.id,' ','')}">Delete To Do List</button>
+                        </div>
+                    </div>
+                    <div th:include="fragments/modals :: deleteToDoList"></div>
+                </div>
+                <!--SHOW TO DOS IN LIST-->
+                <th:block th:each="todo : ${todolist.toDos}">
+                    <div class="todo">
+                        <h5 class="todo-header" th:text="${todo.name}"></h5>
+                        <!--TOGGLE DROPDOWN-->
+                        <div class="dropdown">
+                            <button class="todo-options" type="button" id="todo"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h" title="Options" data-toggle="tooltip"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="todo">
+                                <th:block th:if="${todo.done}">
+                                    <form th:method="post" th:action="@{/changetodostate}">
+                                        <input type="hidden" name="todoId" th:value="${todo.id}">
+                                        <input type="hidden" name="todoBool" th:value="${todo.done}">
+                                        <button class="dropdown-item" type="submit">Unset</button>
+                                    </form>
+                                </th:block>
+                                <th:block th:unless="${todo.done}">
+                                    <form th:method="post" th:action="@{/changetodostate}">
+                                        <input type="hidden" name="todoId" th:value="${todo.id}">
+                                        <input type="hidden" name="todoBool" th:value="${todo.done}">
+                                        <button class="dropdown-item" type="submit">Done</button>
+                                    </form>
+                                </th:block>
+                                <button class="dropdown-item" type="button" data-toggle="modal"
+                                        th:data-target="'#move' + ${#strings.replace(todo.id,' ','')}">Move</button>
+                                <button class="dropdown-item" type="button" data-toggle="modal"
+                                        th:data-target="'#edit' + ${#strings.replace(todo.id,' ','')}">Edit</button>
+                                <button class="dropdown-item" type="button" data-toggle="modal"
+                                        th:data-target="'#delete' + ${#strings.replace(todo.id,' ','')}">Delete</button>
+                            </div>
+                        </div>
+                        <th:block th:if="${todo.done}">
+                            <strike th:text="${todo.msg}"></strike>
+                        </th:block>
+                        <th:block th:unless="${todo.done}">
+                            <p th:text="${todo.msg}"></p>
+                        </th:block>
+                        <div th:include="fragments/modals :: moveToDo"></div>
+                        <div th:include="fragments/modals :: editToDo"></div>
+                        <div th:include="fragments/modals :: deleteToDo"></div>
+                    </div>
+                </th:block>
+                <div th:include="fragments/modals :: addToDo"></div>
+            </div>
+        </th:block>
+    </div>
+    <div th:include="fragments/modals :: addToDoList"></div>
+</body>
+<div th:include="fragments/footer :: links"></div>
+<script src="/static/js/login.js" th:src="@{/js/login.js}"></script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+</html>

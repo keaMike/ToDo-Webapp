@@ -1,0 +1,168 @@
+<!--------------------------------------------ADD TO DO MODAL-------------------------------------------->
+<div th:fragment="addToDo" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" th:id="${'add' + #strings.replace(todolist.id,' ','')}"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="addToDo-content">
+                <div class="modal-body" >
+                    <form th:method="post" th:action="@{/addToDo}">
+                        <div class="input-div one">
+                            <div class="i">
+                                <i class="fas fa-list-ul"></i>
+                            </div>
+                            <div>
+                                <h5>Title</h5>
+                                <input type="text" class="input" name="title" th:field="${newToDo.name}"  required>
+                            </div>
+                        </div>
+                        <div class="input-div two">
+                            <div class="i">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <div>
+                                <h5>Message</h5>
+                                <textarea rows="10" cols="40" type="text" class="input" name="msg" th:field="${newToDo.msg}"  required></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="listId" th:value="${todolist.id}">
+                        <input type="submit" class="btn btn-dark" value="Create">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------------MOVE TO DO MODAL-------------------------------------------->
+<div th:fragment="moveToDo" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" th:id="${'move' + #strings.replace(todo.id,' ','')}"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="moveToDo-content">
+                <div class="modal-body" >
+                    <form th:method="post" th:action="@{/moveToDo}">
+                        <div class="moveToDo">
+                            <h5 th:text="'Move ' + ${todo.name} + ' to'"></h5>
+                            <div class="form-group">
+                                <select class="form-control" name="toDoListId">
+                                    <option value="default">Select a list</option>
+                                    <option th:each="list : ${toDoLists}" th:value="${list.id}" th:text="${list.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="toDoId" th:value="${todo.id}">
+                        <input type="submit" class="btn btn-dark" value="Move">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------------EDIT TO DO MODAL-------------------------------------------->
+<div th:fragment="editToDo" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" th:id="${'edit' + #strings.replace(todo.id,' ','')}"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="editToDo-content">
+                <div class="modal-body" >
+                    <form th:method="post" th:action="@{/editToDo}">
+                        <div class="input-div one">
+                            <div class="i">
+                                <i class="fas fa-list-ul"></i>
+                            </div>
+                            <div>
+                                <h5>Title</h5>
+                                <input type="text" class="input" name="name" th:value="${todo.name}" required>
+                                <input type="hidden" name="id" th:value="${todo.id}">
+                            </div>
+                        </div>
+                        <div class="input-div two">
+                            <div class="i">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <div>
+                                <h5>Message</h5>
+                                <input type="text" class="input" name="msg" th:value="${todo.msg}" required>
+                            </div>
+                        </div>
+                        <input type="hidden" name="toDoListId" th:value="${todo.toDoListId}">
+                        <input type="submit" class="btn btn-dark" value="Save">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------------DELETE TO DO MODAL-------------------------------------------->
+<div th:fragment="deleteToDo" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" th:id="${'delete' + #strings.replace(todo.id,' ','')}"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="deleteToDo-content">
+                <div class="modal-body" >
+                    <form th:method="post" th:action="@{/deleteToDo}">
+                        <h5 th:text="'Are you sure you want to delete: ' + ${todo.name} + '?'"></h5>
+                        <input type="hidden" name="toDoId" th:value="${todo.id}">
+                        <div>
+                            <input type="submit" class="btn btn-dark" value="Yes">
+                            <button class="btn btn-dark" data-dismiss="modal">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------------DELETE TO DO LIST MODAL-------------------------------------------->
+<div th:fragment="deleteToDoList" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" th:id="${'deletelist' + #strings.replace(todolist.id,' ','')}"
+         role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="deleteToDoList-content">
+                <div class="modal-body" >
+                    <form th:method="post" th:action="@{/deleteToDoList}">
+                        <h5 th:text="'Are you sure you want to delete: ' + ${todolist.name} + '?'"></h5>
+                        <input type="hidden" name="toDoListId" th:value="${todolist.id}">
+                        <div>
+                            <input type="submit" class="btn btn-dark" value="Yes">
+                            <button class="btn btn-dark" data-dismiss="modal">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------------ADD TO DO LIST MODAL-------------------------------------------->
+<div th:fragment="addToDoList" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div th:if="${user.id != 0}">
+        <button class="addToDoList" type="button" data-toggle="modal" data-target="#addToDoList">
+            <i class="fas fa-plus-circle" title="Add List" data-toggle="tooltip"></i>
+        </button>
+
+        <div class="modal fade" id="addToDoList" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="addToDoList-content">
+                    <div class="modal-body">
+                        <form th:method="post" th:action="@{/addToDoList}">
+                            <div class="input-div one">
+                                <div class="i">
+                                    <i class="fas fa-list-ul"></i>
+                                </div>
+                                <div>
+                                    <h5>Name</h5>
+                                    <input type="text" class="input" name="name" th:field="${newToDoList.name}"  required>
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-dark" value="Create">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
